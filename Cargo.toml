@@ -1,0 +1,9 @@
+[package]
+
+name = "postgres"
+version = "0.0.1"
+authors = ["Daniel Fagnan <dnfagnan@gmail.com>"]
+
+[lib]
+name = "postgres"
+crate-type = ["dylib"]
