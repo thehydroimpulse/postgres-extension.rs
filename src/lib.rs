@@ -13,6 +13,12 @@ type PGFunction = extern fn(FunctionCallInfo) -> Datum;
 type fmNodePtr = *mut c_void;
 type fmAggrefPtr = *mut c_void;
 
+/// A trait that is implemented for all Postgres-compatible data types.
+trait PgType {}
+
+impl PgType for i16 {}
+impl PgType for bool {}
+
 #[allow(dead_code)]
 extern {
     static no_such_variable: c_int;
@@ -66,6 +72,11 @@ pub struct PgVector<T> {
     dim1: c_int,
     lbound1: c_int,
     values: [T, ..1]
+}
+
+impl<T> PgVector<T>
+    where T: PgType {
+
 }
 
 #[repr(C)]
