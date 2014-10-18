@@ -1,9 +1,13 @@
 [package]
 
-name = "postgres_extension"
+name = "is_zero"
 version = "0.0.1"
 authors = ["Daniel Fagnan <dnfagnan@gmail.com>"]
 
 [lib]
-name = "postgres_extension"
+name = "is_zero"
 crate-type = ["dylib"]
+
+
+[dependencies.postgres_extension]
+path = "../../"
