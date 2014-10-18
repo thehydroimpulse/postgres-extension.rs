@@ -516,8 +516,14 @@ pub struct Pg_magic_struct {
 /// `Pg_magic_func` is the function Postgres will call
 /// to check compatibility with memcmp, so there can't be
 /// any alignment differences.
+///
+/// Usage:
+///
+/// ```notrust
+/// pg_module!(90500)
+/// ```
 #[macro_export]
-macro_rules! pg_module_magic {
+macro_rules! pg_module {
     ($vers:expr) => {
         static mut Pg_magic_data: postgres_extension::Pg_magic_struct =
             postgres_extension::Pg_magic_struct {

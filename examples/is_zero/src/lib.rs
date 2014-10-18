@@ -6,7 +6,7 @@ extern crate libc;
 
 use libc::{c_int};
 
-pg_module_magic!(90500)
+pg_module!(90500)
 
 #[no_mangle]
 pub extern fn is_zero(a: c_int) -> c_int {
