@@ -23,7 +23,6 @@ extern {
 #[repr(C)]
 pub enum NodeTag {
     T_Invalid = 0,
-
     T_IndexInfo = 10,
     T_ExprContext,
     T_ProjectionInfo,
@@ -461,14 +460,9 @@ pub struct Pg_magic_struct {
 #[macro_export]
 macro_rules! pg_module_magic {
     ($vers:expr) => {
-
-        #[no_mangle]
-        #[allow(non_snake_case)]
-        pub extern fn Pg_magic_func() -> *const postgres_extension::Pg_magic_struct {
-            use std::mem::size_of;
-            use libc::{c_int};
-            let data = postgres_extension::Pg_magic_struct {
-                len: size_of::<postgres_extension::Pg_magic_struct>() as c_int,
+        static mut Pg_magic_data: postgres_extension::Pg_magic_struct =
+            postgres_extension::Pg_magic_struct {
+                len: 0 as c_int,
                 version: $vers / 100,
                 funcmaxargs: 100,
                 indexmaxkeys: 32,
@@ -477,7 +471,26 @@ macro_rules! pg_module_magic {
                 float8byval: 1
             };
 
-            &data
+
+        #[no_mangle]
+        #[allow(non_snake_case)]
+        pub extern fn Pg_magic_func() -> &'static postgres_extension::Pg_magic_struct {
+            use std::mem::size_of;
+            use libc::{c_int};
+
+            unsafe {
+                Pg_magic_data = postgres_extension::Pg_magic_struct {
+                    len: size_of::<postgres_extension::Pg_magic_struct>() as c_int,
+                    version: $vers / 100,
+                    funcmaxargs: 100,
+                    indexmaxkeys: 32,
+                    nameddatalen: 64,
+                    float4byval: 1,
+                    float8byval: 1
+                };
+
+                &Pg_magic_data
+            }
         }
     }
 }
