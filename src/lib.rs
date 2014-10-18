@@ -20,6 +20,54 @@ extern {
     pub fn pg_free(ptr: *mut c_void);
 }
 
+/// Variable-length datatypes all share this header.
+/// The length is encoded as a `char` in C, which is equivalent
+/// to `i8`.
+///
+/// Postgres uses a workaround to have a variable-length data field in that
+/// they use a fixed-size, single-element array to fit the data. They simply
+/// allocate anough room for the real size and use the array as a pointer. This
+/// only works because the compiler doesn't verify the integrity of the size of the
+/// array. We'll simply work with a mutable pointer, instead.
+///
+/// https://github.com/postgres/postgres/blob/master/src/include/c.h#L391
+#[repr(C)]
+pub struct Varlena {
+    len: [i8, ..4],
+    data: *mut i8
+}
+
+#[repr(C)]
+pub struct Text {
+    p: Varlena
+}
+
+#[repr(C)]
+pub struct BpChar {
+    p: Varlena
+}
+
+#[repr(C)]
+pub struct VarChar {
+    p: Varlena
+}
+
+#[repr(C)]
+pub struct Bytea {
+    p: Varlena
+}
+
+#[repr(C)]
+pub struct PgVector<T> {
+    len: i32,
+    ndim: c_int,
+    data_offset: i32,
+    elemtype: c_void,
+    dim1: c_int,
+    lbound1: c_int,
+    values: [T, ..1]
+}
+
 #[repr(C)]
 pub enum NodeTag {
     T_Invalid = 0,
