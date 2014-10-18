@@ -4,6 +4,8 @@
 extern crate postgres_extension;
 extern crate libc;
 
+use libc::{c_int};
+
 pg_module_magic!(90500)
 
 #[no_mangle]
