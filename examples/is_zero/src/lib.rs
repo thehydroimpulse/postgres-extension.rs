@@ -10,12 +10,12 @@ extern crate libc;
 
 use libc::{c_int};
 
-pg_module!(version: 905)
+pg_module!(version: 90500)
 
-#[no_mangle]
-pub extern fn is_zero(a: c_int) -> c_int {
+#[pg_export]
+pub fn is_zero(a: c_int) -> c_int {
     if a == 0 {
-        return 1
+        return 0
     } else {
         return 0
     }

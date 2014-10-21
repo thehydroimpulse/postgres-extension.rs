@@ -3,3 +3,7 @@
 name = "postgres_macros"
 version = "0.0.1"
 authors = ["Daniel Fagnan <dnfagnan@gmail.com>"]
+
+[lib]
+name = "postgres_macros"
+crate-type = ["dylib", "rlib"]
