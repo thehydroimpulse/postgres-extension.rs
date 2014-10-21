@@ -1,9 +1,9 @@
 [package]
 
-name = "postgres_macros"
+name = "postgres_extension_macros"
 version = "0.0.1"
 authors = ["Daniel Fagnan <dnfagnan@gmail.com>"]
 
 [lib]
-name = "postgres_macros"
+name = "postgres_extension_macros"
 crate-type = ["dylib", "rlib"]

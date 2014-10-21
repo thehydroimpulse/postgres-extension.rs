@@ -1,10 +1,9 @@
 #![feature(phase)]
 
-#[phase(plugin, link)]
 extern crate postgres_extension;
 
 #[phase(plugin)]
-extern crate postgres_macros;
+extern crate postgres_extension_macros;
 
 extern crate libc;
 
@@ -20,3 +19,5 @@ pub fn is_zero(a: c_int) -> c_int {
         return 0
     }
 }
+
+
