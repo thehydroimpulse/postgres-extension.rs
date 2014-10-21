@@ -2,6 +2,10 @@
 
 #[phase(plugin, link)]
 extern crate postgres_extension;
+
+#[phase(plugin)]
+extern crate postgres_macros;
+
 extern crate libc;
 
 use libc::{c_int};
