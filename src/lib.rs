@@ -524,11 +524,11 @@ pub struct Pg_magic_struct {
 /// ```
 #[macro_export]
 macro_rules! pg_module {
-    ($vers:expr) => {
+    (version: $vers:expr) => {
         static mut Pg_magic_data: postgres_extension::Pg_magic_struct =
             postgres_extension::Pg_magic_struct {
                 len: 0 as c_int,
-                version: $vers / 100,
+                version: $vers,
                 funcmaxargs: 100,
                 indexmaxkeys: 32,
                 nameddatalen: 64,
