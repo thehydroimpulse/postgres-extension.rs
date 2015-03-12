@@ -1,9 +1,9 @@
-#![feature(macro_rules, plugin_registrar, quote, phase)]
+#![feature(plugin_registrar, quote)]
 #![allow(unused_imports)]
 
-#[phase(plugin,link)]
+#[macro_use]
 extern crate syntax;
-#[phase(plugin, link)]
+#[macro_use]
 extern crate rustc;
 
 use rustc::lint::LintPassObject;
@@ -25,7 +25,7 @@ use syntax::parse::token::InternedString;
 
 #[plugin_registrar]
 pub fn plugin_registrar(reg: &mut Registry) {
-    reg.register_syntax_extension(intern("pg_export"), Modifier(box expand_pg_export));
+    reg.register_syntax_extension(intern("pg_export"), Modifier(Box::new(expand_pg_export)));
 }
 
 pub fn expand_pg_export(cx: &mut ExtCtxt, span: Span, _: &MetaItem, item: P<Item>) -> P<Item> {

@@ -1,10 +1,10 @@
-#![feature(macro_rules)]
+#![feature(macro_rules, core, libc)]
 
 extern crate libc;
 extern crate core;
 
 use core::cell::UnsafeCell;
-use core::kinds::marker::InvariantLifetime;
+use core::marker::{InvariantLifetime, MarkerTrait};
 use libc::{c_int, c_void, size_t};
 
 pub const FUNC_MAX_ARGS: c_int = 100;
@@ -14,10 +14,7 @@ type fmNodePtr = *mut c_void;
 type fmAggrefPtr = *mut c_void;
 
 /// A trait that is implemented for all Postgres-compatible data types.
-trait PgType {}
-
-impl PgType for i16 {}
-impl PgType for bool {}
+trait PgType : MarkerTrait {}
 
 #[allow(dead_code)]
 extern {
@@ -39,7 +36,7 @@ extern {
 /// https://github.com/postgres/postgres/blob/master/src/include/c.h#L391
 #[repr(C)]
 pub struct Varlena {
-    len: [i8, ..4],
+    len: [i8; 4],
     data: *mut i8
 }
 
@@ -71,7 +68,7 @@ pub struct PgVector<T> {
     elemtype: c_void,
     dim1: c_int,
     lbound1: c_int,
-    values: [T, ..1]
+    values: [T; 1]
 }
 
 impl<T> PgVector<T>
@@ -458,8 +455,8 @@ pub struct FunctionCallInfoData {
     fn_collation: c_void,
     is_null: bool,
     nargs: u16,
-    arg: [Datum, ..FUNC_MAX_ARGS as uint],
-    argnull: [bool, ..FUNC_MAX_ARGS as uint]
+    arg: [Datum; FUNC_MAX_ARGS as usize],
+    argnull: [bool; FUNC_MAX_ARGS as usize]
 }
 
 pub struct FunctionCallInfo<'a> {
@@ -471,7 +468,7 @@ pub struct FunctionCallInfo<'a> {
 /// a pointer-sized unsigned integer that acts like
 /// a pointer.
 pub struct Datum {
-    val: uint
+    val: usize
 }
 
 impl Datum {
