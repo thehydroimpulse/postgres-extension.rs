@@ -1,10 +1,10 @@
-#![feature(macro_rules, core, libc)]
+#![feature(core)]
 
 extern crate libc;
 extern crate core;
 
 use core::cell::UnsafeCell;
-use core::marker::{InvariantLifetime, MarkerTrait};
+use std::marker::PhantomData;
 use libc::{c_int, c_void, size_t};
 
 pub const FUNC_MAX_ARGS: c_int = 100;
@@ -14,7 +14,7 @@ type fmNodePtr = *mut c_void;
 type fmAggrefPtr = *mut c_void;
 
 /// A trait that is implemented for all Postgres-compatible data types.
-trait PgType : MarkerTrait {}
+trait PgType {}
 
 #[allow(dead_code)]
 extern {
@@ -461,7 +461,7 @@ pub struct FunctionCallInfoData {
 
 pub struct FunctionCallInfo<'a> {
     ptr: *mut FunctionCallInfoData,
-    marker: InvariantLifetime<'a>
+    marker: PhantomData<&'a FunctionCallInfoData>
 }
 
 /// A wrapper around a Postgres `Datum`. A datum is simply
@@ -488,7 +488,7 @@ impl Datum {
 
 pub struct DatumPtr<'a> {
     ptr: UnsafeCell<Datum>,
-    marker: InvariantLifetime<'a>
+    marker: PhantomData<&'a Datum>
 }
 
 /// The magic metadata that Postgres will ready by calling
