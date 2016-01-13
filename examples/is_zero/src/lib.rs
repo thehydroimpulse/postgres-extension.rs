@@ -15,10 +15,13 @@ pg_module!(version: 90500);
 #[pg_export]
 pub fn is_zero(a: c_int) -> c_int {
     if a == 0 {
-        return 0
+        return 1
     } else {
         return 0
     }
 }
 
-
+#[pg_export]
+pub fn echo_num(a: c_int) -> c_int {
+    return a
+}
