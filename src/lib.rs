@@ -1,5 +1,3 @@
-#![feature(core)]
-
 extern crate libc;
 extern crate core;
 
